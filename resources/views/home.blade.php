@@ -5,10 +5,10 @@
 @section('content')
 
 {{-- =================== HERO =================== --}}
-<section id="hero" class="relative flex min-h-screen items-center overflow-hidden px-6 lg:px-10">
+<section id="hero" class="relative flex min-h-screen flex-col overflow-hidden px-6 lg:px-10">
     <div data-hero-glow class="pointer-events-none absolute -right-40 top-1/4 h-[36rem] w-[36rem] rounded-full bg-bordeaux/30 blur-[140px]"></div>
 
-    <div class="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
+    <div class="mx-auto my-auto w-full grid max-w-7xl items-center gap-16 py-32 lg:grid-cols-2">
         <div>
             <p data-hero-eyebrow class="eyebrow mb-6 opacity-0" style="transform: translateY(20px)">The 2026 Collection</p>
 

@@ -51,7 +51,7 @@ export function initScrollReveal() {
     document.querySelectorAll('[data-reveal-lines]').forEach((heading) => {
         const words = heading.textContent.trim().split(' ');
         heading.innerHTML = words
-            .map((w) => `<span class="reveal-line inline-block overflow-hidden align-bottom"><span>${w}&nbsp;</span></span>`)
+            .map((w) => `<span class="reveal-line inline-block overflow-hidden align-bottom -mb-[0.3em]"><span class="inline-block pb-[0.3em]">${w}&nbsp;</span></span>`)
             .join('');
 
         gsap.to(heading.querySelectorAll('.reveal-line span'), {

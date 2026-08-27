@@ -11,8 +11,18 @@ export function initNav() {
     if (!nav) return;
 
     ScrollTrigger.create({
-        start: 'top -80',
-        onUpdate: (self) => nav.classList.toggle('nav-scrolled', self.scroll() > 80),
+        start: 0,
+        onUpdate: (self) => {
+            const currentScroll = self.scroll();
+            nav.classList.toggle('nav-scrolled', currentScroll > 80);
+
+            // Hide on scroll down, show on scroll up (or if at the top)
+            if (currentScroll > 150 && self.direction === 1) {
+                gsap.to(nav, { yPercent: -100, duration: 0.4, ease: 'power3.out', overwrite: true });
+            } else {
+                gsap.to(nav, { yPercent: 0, duration: 0.4, ease: 'power3.out', overwrite: true });
+            }
+        },
     });
 
     if (progress) {
