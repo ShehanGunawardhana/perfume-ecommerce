@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis / GSAP ScrollSmoother takes over */
+}
+
+body {
+  @apply bg-void text-ivory font-body antialiased;
+}
+
+::selection {
+  @apply bg-amber text-void;
+}
+
+/* ----------------------------------------------------------------
+   Typography
+---------------------------------------------------------------- */
+.font-display {
+  font-family: 'Fraunces', serif;
+  font-optical-sizing: auto;
+}
+
+.eyebrow {
+  @apply font-body text-xs uppercase tracking-widest2 text-amber-light;
+}
+
+/* ----------------------------------------------------------------
+   Preloader
+---------------------------------------------------------------- */
+#loader {
+  @apply fixed inset-0 z-[100] flex items-center justify-center bg-void;
+}
+
+#loader .loader-mark {
+  @apply font-display text-2xl tracking-widest2 text-ivory opacity-0;
+}
+
+#loader .loader-line {
+  @apply absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-amber;
+}
+
+/* ----------------------------------------------------------------
+   Custom cursor (desktop only, see cursor.js)
+---------------------------------------------------------------- */
+.cursor-dot {
+  @apply pointer-events-none fixed left-0 top-0 z-[90] h-2 w-2 rounded-full bg-amber mix-blend-difference;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  @apply pointer-events-none fixed left-0 top-0 z-[90] h-9 w-9 rounded-full border border-amber/70;
+  transform: translate(-50%, -50%);
+}
+
+/* ----------------------------------------------------------------
+   Navigation
+---------------------------------------------------------------- */
+#site-nav {
+  @apply fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-500;
+}
+
+#site-nav.nav-scrolled {
+  @apply border-line bg-void/85 backdrop-blur-md;
+}
+
+.nav-progress {
+  @apply absolute bottom-0 left-0 h-px origin-left scale-x-0 bg-amber;
+  width: 100%;
+}
+
+.nav-link {
+  @apply relative text-sm text-ivory/80 transition-colors duration-300 hover:text-ivory;
+}
+
+.nav-link::after {
+  content: '';
+  @apply absolute -bottom-1 left-0 h-px w-0 bg-amber transition-all duration-300;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  @apply w-full;
+}
+
+/* ----------------------------------------------------------------
+   Buttons
+---------------------------------------------------------------- */
+.btn {
+  @apply relative inline-flex items-center justify-center overflow-hidden px-8 py-3 text-xs uppercase tracking-widest2 transition-colors duration-300;
+}
+
+.btn-primary {
+  @apply btn border border-amber text-ivory hover:text-void;
+}
+
+.btn-primary::before {
+  content: '';
+  @apply absolute inset-0 -z-10 origin-left scale-x-0 bg-amber transition-transform duration-500;
+  transition-timing-function: var(--ease-silk);
+}
+
+.btn-primary:hover::before {
+  @apply scale-x-100;
+}
+
+.btn-ghost {
+  @apply btn text-ivory/70 hover:text-ivory;
+}
+
+/* magnetic wrapper target, see cursor.js magnetic() */
+[data-magnetic] {
+  @apply inline-block will-change-transform;
+}
+
+/* ----------------------------------------------------------------
+   Reveal utilities (animated in by scroll-reveal.js / hero.js)
+---------------------------------------------------------------- */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(3rem);
+}
+
+.reveal-line span {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+.reveal-mask {
+  overflow: hidden;
+}
+
+.reveal-mask img,
+.reveal-mask video {
+  transform: scale(1.15);
+}
+
+/* ----------------------------------------------------------------
+   Product card
+---------------------------------------------------------------- */
+.product-card .product-media {
+  @apply relative overflow-hidden bg-white/5;
+}
+
+.product-card .product-media img {
+  @apply h-full w-full object-cover transition-transform duration-700;
+  transition-timing-function: var(--ease-silk);
+}
+
+.product-card:hover .product-media img {
+  transform: scale(1.08);
+}
+
+.product-card .product-actions {
+  @apply absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center gap-3 bg-void/80 py-3 opacity-0 backdrop-blur-sm transition-all duration-500;
+}
+
+.product-card:hover .product-actions {
+  @apply translate-y-0 opacity-100;
+}
+
+/* ----------------------------------------------------------------
+   Scroll-driven video ("Scent Ribbon") section — see video-scroll.js
+---------------------------------------------------------------- */
+#scent-ribbon {
+  position: relative;
+  height: 400vh; /* scroll distance that drives the video scrub */
+}
+
+#scent-ribbon .ribbon-sticky {
+  @apply sticky top-0 h-screen w-full overflow-hidden;
+}
+
+#scent-ribbon video {
+  @apply absolute inset-0 h-full w-full object-cover;
+  filter: brightness(0.55) saturate(1.05);
+}
+
+#scent-ribbon .ribbon-caption {
+  @apply pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-6 text-center opacity-0;
+}
+
+#scent-ribbon .ribbon-caption h3 {
+  @apply font-display text-4xl font-light text-ivory md:text-6xl;
+}
+
+/* ----------------------------------------------------------------
+   Skeleton loaders (for async product grids)
+---------------------------------------------------------------- */
+.skeleton {
+  @apply relative overflow-hidden bg-white/5;
+}
+
+.skeleton::after {
+  content: '';
+  @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
+  animation: skeleton-sweep 1.6s infinite;
+}
+
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ----------------------------------------------------------------
+   Toast notifications — see app.js toast()
+---------------------------------------------------------------- */
+#toast-root {
+  @apply pointer-events-none fixed bottom-6 right-6 z-[95] flex flex-col gap-2;
+}
+
+.toast {
+  @apply pointer-events-auto flex items-center gap-3 border border-line bg-void px-5 py-3 text-sm text-ivory shadow-xl;
+  transform: translateX(120%);
+}
+
+/* ----------------------------------------------------------------
+   Reduced motion
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-line span,
+  .reveal-mask img,
+  .reveal-mask video {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,45 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('perfumes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('brand')->nullable();
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->decimal('discount_price', 10, 2)->nullable();
+            $table->unsignedInteger('stock')->default(0);
+            $table->enum('gender', ['men', 'women', 'unisex'])->default('unisex');
+            $table->string('volume')->nullable(); // e.g. "100ml"
+            $table->string('main_image')->nullable();
+
+            // Fragrance details
+            $table->string('fragrance_family')->nullable();
+            $table->string('concentration')->nullable(); // EDT, EDP, Parfum...
+            $table->string('top_notes')->nullable();
+            $table->string('middle_notes')->nullable();
+            $table->string('base_notes')->nullable();
+            $table->string('longevity')->nullable();
+            $table->string('season')->nullable();
+            $table->string('occasion')->nullable();
+
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('perfumes');
+    }
+};
