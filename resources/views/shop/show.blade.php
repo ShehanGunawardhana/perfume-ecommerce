@@ -3,29 +3,61 @@
 
 @section('content')
 <section class="px-6 pt-32 pb-24 lg:px-10">
-    <div class="mx-auto grid max-w-7xl gap-16 lg:grid-cols-2">
-        <div>
-            <div data-reveal-mask class="aspect-[3/4] w-full mb-4" style="clip-path: inset(0 0 100% 0)">
-                @if ($perfume->main_image)
-                    <img src="{{ asset('storage/' . $perfume->main_image) }}" alt="{{ $perfume->name }}" class="h-full w-full object-cover">
+    <div class="mx-auto grid max-w-7xl gap-16 lg:grid-cols-12">
+        <div class="lg:col-span-5 max-w-md mx-auto w-full" x-data="{ 
+            @php $allImages = collect([$perfume->main_image])->concat($perfume->images->pluck('image_path'))->filter()->values(); @endphp
+            count: {{ $allImages->count() }},
+            active: 0,
+            interval: null,
+            init() {
+                if (this.count > 1) {
+                    this.start();
+                }
+            },
+            start() {
+                this.interval = setInterval(() => {
+                    this.active = (this.active + 1) % this.count;
+                }, 7000);
+            },
+            stop() {
+                if (this.interval) clearInterval(this.interval);
+            },
+            setActive(index) {
+                this.active = index;
+                this.stop();
+                this.start();
+            }
+        }" @mouseenter="stop()" @mouseleave="start()">
+            
+            <div data-reveal-mask class="relative aspect-[4/5] w-full mb-6 bg-surface overflow-hidden rounded-2xl border border-line" style="clip-path: inset(0 0 100% 0)">
+                @if ($allImages->isNotEmpty())
+                    @foreach ($allImages as $index => $imgPath)
+                        <img src="{{ asset('storage/' . $imgPath) }}" 
+                             alt="{{ $perfume->name }}" 
+                             class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out"
+                             :class="active === {{ $index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                    @endforeach
                 @else
                     <div class="flex h-full w-full items-center justify-center bg-surface">
                         <span class="text-sm text-smoke">No Image</span>
                     </div>
                 @endif
             </div>
-            @if ($perfume->images->isNotEmpty())
+
+            @if ($allImages->count() > 1)
                 <div class="grid grid-cols-4 gap-4" data-reveal>
-                    @foreach ($perfume->images as $img)
-                        <div class="aspect-square bg-surface">
-                            <img src="{{ asset('storage/' . $img->image_path) }}" alt="{{ $perfume->name }}" class="h-full w-full object-cover">
-                        </div>
+                    @foreach ($allImages as $index => $imgPath)
+                        <button @click="setActive({{ $index }})" 
+                                class="aspect-[4/5] bg-surface overflow-hidden rounded-xl border-2 transition-colors duration-300" 
+                                :class="active === {{ $index }} ? 'border-amber-light' : 'border-transparent hover:border-line'">
+                            <img src="{{ asset('storage/' . $imgPath) }}" alt="Thumbnail" class="h-full w-full object-cover">
+                        </button>
                     @endforeach
                 </div>
             @endif
         </div>
 
-        <div data-reveal>
+        <div class="lg:col-span-7" data-reveal>
             <p class="eyebrow mb-3">{{ $perfume->category->name ?? '' }}</p>
             <h1 class="font-display text-4xl font-light md:text-5xl">{{ $perfume->name }}</h1>
             <p class="mt-2 text-smoke">{{ $perfume->brand }}</p>
