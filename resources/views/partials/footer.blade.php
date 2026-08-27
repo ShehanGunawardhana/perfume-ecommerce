@@ -1,7 +1,7 @@
 <footer class="border-t border-line bg-void px-6 py-16 lg:px-10">
     <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-4">
         <div>
-            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="{{ config('app.name') }}" class="mb-4 h-7 w-auto">
+            <img src="{{ asset('assets/images/logo/logo.png') }}" alt="{{ config('app.name') }}" class="mb-4 h-10 w-auto">
             <p class="max-w-xs text-sm text-smoke">
                 Rare ingredients, patient composition, and fragrances built to be remembered.
             </p>
@@ -43,7 +43,7 @@
     <div class="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-line pt-6 text-xs text-smoke lg:flex-row">
         <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
         <button
-            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
             class="btn-ghost border border-line"
             data-magnetic
         >

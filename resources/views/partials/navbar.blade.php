@@ -24,7 +24,7 @@
 
         {{-- Logo — see /public/assets/images/logo/README.md for exact filenames --}}
         <a href="{{ route('home') }}" class="flex items-center gap-3" data-magnetic>
-            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="{{ config('app.name') }}" class="h-8 w-auto">
+            <img src="{{ asset('assets/images/logo/logo.png') }}" alt="{{ config('app.name') }}" class="h-12 w-auto">
         </a>
 
         <div class="hidden items-center gap-9 lg:flex">

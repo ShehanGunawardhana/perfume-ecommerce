@@ -26,7 +26,7 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:4096',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'is_active' => 'boolean',
         ]);
 
@@ -51,7 +51,7 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:4096',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'is_active' => 'boolean',
         ]);
 

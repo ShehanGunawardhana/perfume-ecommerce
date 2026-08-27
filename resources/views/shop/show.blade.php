@@ -4,8 +4,25 @@
 @section('content')
 <section class="px-6 pt-32 pb-24 lg:px-10">
     <div class="mx-auto grid max-w-7xl gap-16 lg:grid-cols-2">
-        <div data-reveal-mask class="aspect-[3/4] w-full" style="clip-path: inset(0 0 100% 0)">
-            <img src="{{ $perfume->main_image ? asset('storage/' . $perfume->main_image) : asset('assets/images/perfumes/placeholder.jpg') }}" alt="{{ $perfume->name }}" class="h-full w-full object-cover">
+        <div>
+            <div data-reveal-mask class="aspect-[3/4] w-full mb-4" style="clip-path: inset(0 0 100% 0)">
+                @if ($perfume->main_image)
+                    <img src="{{ asset('storage/' . $perfume->main_image) }}" alt="{{ $perfume->name }}" class="h-full w-full object-cover">
+                @else
+                    <div class="flex h-full w-full items-center justify-center bg-surface">
+                        <span class="text-sm text-smoke">No Image</span>
+                    </div>
+                @endif
+            </div>
+            @if ($perfume->images->isNotEmpty())
+                <div class="grid grid-cols-4 gap-4" data-reveal>
+                    @foreach ($perfume->images as $img)
+                        <div class="aspect-square bg-surface">
+                            <img src="{{ asset('storage/' . $img->image_path) }}" alt="{{ $perfume->name }}" class="h-full w-full object-cover">
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div data-reveal>
@@ -55,7 +72,13 @@
                 @foreach ($related as $item)
                     <article class="product-card">
                         <a href="{{ route('shop.show', $item->slug) }}" class="product-media block aspect-[3/4]">
-                            <img src="{{ $item->main_image ? asset('storage/' . $item->main_image) : asset('assets/images/perfumes/placeholder.jpg') }}" alt="{{ $item->name }}" loading="lazy">
+                            @if ($item->main_image)
+                                <img src="{{ asset('storage/' . $item->main_image) }}" alt="{{ $item->name }}" loading="lazy">
+                            @else
+                                <div class="flex h-full w-full items-center justify-center bg-surface">
+                                    <span class="text-xs text-smoke">No Image</span>
+                                </div>
+                            @endif
                         </a>
                         <div class="mt-4 flex items-start justify-between">
                             <p class="text-sm text-ivory">{{ $item->name }}</p>

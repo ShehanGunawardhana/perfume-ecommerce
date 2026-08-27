@@ -27,8 +27,8 @@
             </div>
         </div>
 
-        <div data-hero-image class="relative mx-auto aspect-[3/4] w-full max-w-md scale-95 opacity-0" style="perspective: 1000px">
-            <img src="{{ asset('assets/images/perfumes/hero-bottle.png') }}" alt="Featured perfume bottle" class="h-full w-full object-contain drop-shadow-2xl">
+        <div data-hero-image class="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-t-[10rem] rounded-b-2xl border border-line scale-95 opacity-0" style="perspective: 1000px">
+            <img src="{{ asset('assets/images/perfumes/hero-bottle.png') }}" alt="Featured perfume bottle" class="h-full w-full object-cover">
         </div>
     </div>
 </section>
@@ -60,7 +60,17 @@
                             <p class="text-sm text-ivory">{{ $perfume->name }}</p>
                             <p class="text-xs text-smoke">{{ $perfume->brand }}</p>
                         </div>
-                        <p class="text-sm text-amber-light">${{ number_format($perfume->display_price, 2) }}</p>
+                        <div class="text-right">
+                            <p class="text-sm text-amber-light">${{ number_format($perfume->display_price, 2) }}</p>
+                            @auth
+                                <form method="POST" action="{{ route('wishlist.store', $perfume) }}" class="mt-1 inline-block">
+                                    @csrf
+                                    <button class="text-xs text-smoke hover:text-bordeaux" title="Add to Wishlist">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                    </button>
+                                </form>
+                            @endauth
+                        </div>
                     </div>
                 </article>
             @empty

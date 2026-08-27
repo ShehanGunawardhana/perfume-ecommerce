@@ -20,69 +20,64 @@ export function initVideoScroll() {
     const captions = gsap.utils.toArray('#scent-ribbon .ribbon-caption');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const ready = new Promise((resolve) => {
-        if (video.readyState >= 1) return resolve();
-        video.addEventListener('loadedmetadata', () => resolve(), { once: true });
-    });
+    if (reducedMotion) return;
 
-    ready.then(() => {
-        video.pause();
+    // Fetch the video as a Blob to guarantee smooth scrubbing without network/server range-request latency
+    const src = video.querySelector('source')?.src || video.src;
+    fetch(src)
+        .then(response => response.blob())
+        .then(blob => {
+            const blobURL = URL.createObjectURL(blob);
+            video.src = blobURL;
+            video.load();
+            video.pause();
 
-        const state = { time: 0 };
+            video.addEventListener('loadedmetadata', () => {
+                const state = { time: 0 };
+                const duration = video.duration && !isNaN(video.duration) && video.duration !== Infinity ? video.duration : 10;
 
-        const scrub = gsap.to(state, {
-            time: video.duration || 1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: 0.6,
-            },
-            onUpdate: () => {
-                if (!reducedMotion) {
-                    video.currentTime = state.time;
-                }
-            },
+                gsap.to(state, {
+                    time: duration,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top top',
+                        end: 'bottom bottom',
+                        scrub: 0.1,
+                    },
+                    onUpdate: () => {
+                        video.currentTime = state.time;
+                    },
+                });
+
+                // Fade each caption in for roughly one quarter of the scrub range.
+                captions.forEach((caption, i) => {
+                    const start = i / captions.length;
+                    const end = (i + 1) / captions.length;
+
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start: `${start * 100}% top`,
+                        end: `${end * 100}% top`,
+                        onEnter: () => gsap.to(caption, { opacity: 1, y: 0, duration: 0.4, overwrite: true }),
+                        onLeave: () => gsap.to(caption, { opacity: 0, y: -20, duration: 0.4, overwrite: true }),
+                        onEnterBack: () => gsap.to(caption, { opacity: 1, y: 0, duration: 0.4, overwrite: true }),
+                        onLeaveBack: () => gsap.to(caption, { opacity: 0, y: 20, duration: 0.4, overwrite: true }),
+                    });
+                });
+
+                // Gentle zoom on the video itself across the whole section.
+                gsap.fromTo(
+                    video,
+                    { scale: 1.08 },
+                    {
+                        scale: 1,
+                        ease: 'none',
+                        scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: true },
+                    }
+                );
+
+                ScrollTrigger.refresh();
+            }, { once: true });
         });
-
-        // Fade each caption in for roughly one quarter of the scrub range.
-        captions.forEach((caption, i) => {
-            const start = i / captions.length;
-            const end = (i + 1) / captions.length;
-
-            ScrollTrigger.create({
-                trigger: section,
-                start: () => `top+=${start * (scrub.scrollTrigger.end - scrub.scrollTrigger.start)} top`,
-                end: () => `top+=${end * (scrub.scrollTrigger.end - scrub.scrollTrigger.start)} top`,
-                onEnter: () => gsap.to(caption, { opacity: 1, y: 0, duration: 0.6 }),
-                onLeave: () => gsap.to(caption, { opacity: 0, y: -20, duration: 0.4 }),
-                onEnterBack: () => gsap.to(caption, { opacity: 1, y: 0, duration: 0.6 }),
-                onLeaveBack: () => gsap.to(caption, { opacity: 0, y: 20, duration: 0.4 }),
-            });
-        });
-
-        // Gentle zoom on the video itself across the whole section.
-        gsap.fromTo(
-            video,
-            { scale: 1.08 },
-            {
-                scale: 1,
-                ease: 'none',
-                scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: true },
-            }
-        );
-    });
-
-    // Fallback: if the browser can't/won't scrub smoothly (very old mobile
-    // Safari, data-saver mode, reduced motion) just play the video normally
-    // once it's in view.
-    if (reducedMotion) {
-        ScrollTrigger.create({
-            trigger: section,
-            start: 'top 60%',
-            once: true,
-            onEnter: () => video.play().catch(() => {}),
-        });
-    }
 }

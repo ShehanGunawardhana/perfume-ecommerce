@@ -33,7 +33,15 @@ class PerfumeController extends Controller
             $data['main_image'] = $request->file('main_image')->store('perfumes', 'public');
         }
 
-        Perfume::create($data);
+        $perfume = Perfume::create($data);
+
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $image) {
+                $perfume->images()->create([
+                    'image_path' => $image->store('perfumes/gallery', 'public')
+                ]);
+            }
+        }
 
         return redirect()->route('admin.perfumes.index')->with('success', 'Perfume created.');
     }
@@ -54,6 +62,14 @@ class PerfumeController extends Controller
         }
 
         $perfume->update($data);
+
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $image) {
+                $perfume->images()->create([
+                    'image_path' => $image->store('perfumes/gallery', 'public')
+                ]);
+            }
+        }
 
         return redirect()->route('admin.perfumes.index')->with('success', 'Perfume updated.');
     }
@@ -88,6 +104,7 @@ class PerfumeController extends Controller
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'main_image' => 'nullable|image|max:4096',
+            'gallery_images.*' => 'nullable|image|max:4096',
         ]);
     }
 }

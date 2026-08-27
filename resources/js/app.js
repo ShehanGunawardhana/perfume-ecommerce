@@ -10,7 +10,9 @@ import { initVideoScroll } from './animations/video-scroll';
 import { initProductCards } from './animations/product-cards';
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.body.classList.add('overflow-hidden');
+    if (document.getElementById('loader')) {
+        document.body.classList.add('overflow-hidden');
+    }
 
     initLoader();
     initCursor();

@@ -15,7 +15,13 @@
                 @forelse ($results as $perfume)
                     <article class="product-card">
                         <a href="{{ route('shop.show', $perfume->slug) }}" class="product-media block aspect-[3/4]">
-                            <img src="{{ $perfume->main_image ? asset('storage/' . $perfume->main_image) : asset('assets/images/perfumes/placeholder.jpg') }}" alt="{{ $perfume->name }}" loading="lazy">
+                            @if ($perfume->main_image)
+                                <img src="{{ asset('storage/' . $perfume->main_image) }}" alt="{{ $perfume->name }}" loading="lazy">
+                            @else
+                                <div class="flex h-full w-full items-center justify-center bg-surface">
+                                    <span class="text-xs text-smoke">No Image</span>
+                                </div>
+                            @endif
                         </a>
                         <p class="mt-4 text-sm text-ivory">{{ $perfume->name }}</p>
                     </article>

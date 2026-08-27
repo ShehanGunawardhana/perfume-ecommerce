@@ -1,3 +1,12 @@
+@if ($errors->any())
+    <div class="mb-6 rounded border border-red-500 bg-red-500/10 p-4 text-sm text-red-500">
+        <ul class="list-inside list-disc">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 @csrf
 <input type="text" name="name" placeholder="Name" value="{{ old('name', $perfume->name ?? '') }}" required class="w-full border border-line bg-transparent px-4 py-3 text-sm">
 <input type="text" name="brand" placeholder="Brand" value="{{ old('brand', $perfume->brand ?? '') }}" class="w-full border border-line bg-transparent px-4 py-3 text-sm">
@@ -33,7 +42,27 @@
 <input type="text" name="middle_notes" placeholder="Middle Notes" value="{{ old('middle_notes', $perfume->middle_notes ?? '') }}" class="w-full border border-line bg-transparent px-4 py-3 text-sm">
 <input type="text" name="base_notes" placeholder="Base Notes" value="{{ old('base_notes', $perfume->base_notes ?? '') }}" class="w-full border border-line bg-transparent px-4 py-3 text-sm">
 
-<input type="file" name="main_image" class="w-full border border-line bg-transparent px-4 py-3 text-sm">
+<div>
+    <label class="block text-sm text-smoke mb-2">Main Image</label>
+    @if(isset($perfume) && $perfume->main_image)
+        <div class="mb-2">
+            <img src="{{ asset('storage/' . $perfume->main_image) }}" alt="Main Image" class="h-20 object-cover">
+        </div>
+    @endif
+    <input type="file" name="main_image" class="w-full border border-line bg-transparent px-4 py-3 text-sm">
+</div>
+
+<div>
+    <label class="block text-sm text-smoke mb-2">Gallery Images (Upload multiple)</label>
+    @if(isset($perfume) && $perfume->images->count() > 0)
+        <div class="mb-2 flex gap-2 flex-wrap">
+            @foreach($perfume->images as $img)
+                <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image" class="h-16 object-cover border border-line">
+            @endforeach
+        </div>
+    @endif
+    <input type="file" name="gallery_images[]" multiple class="w-full border border-line bg-transparent px-4 py-3 text-sm">
+</div>
 
 <div class="flex gap-6 text-sm">
     <label class="flex items-center gap-2"><input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $perfume->is_featured ?? false) ? 'checked' : '' }}> Featured</label>

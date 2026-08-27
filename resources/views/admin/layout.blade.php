@@ -10,7 +10,7 @@
 <body class="bg-void text-ivory font-body">
     <div class="flex min-h-screen">
         <aside class="w-64 shrink-0 border-r border-line px-6 py-8">
-            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo" class="mb-10 h-7 w-auto">
+            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo" class="mb-10 h-10 w-auto">
             <nav class="space-y-1 text-sm">
                 <a href="{{ route('admin.dashboard') }}" class="block rounded px-3 py-2 hover:bg-white/5 {{ request()->routeIs('admin.dashboard') ? 'text-amber-light' : 'text-ivory/80' }}">Dashboard</a>
                 <a href="{{ route('admin.perfumes.index') }}" class="block rounded px-3 py-2 hover:bg-white/5 {{ request()->routeIs('admin.perfumes.*') ? 'text-amber-light' : 'text-ivory/80' }}">Perfumes</a>
