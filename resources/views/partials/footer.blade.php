@@ -29,7 +29,7 @@
         <div>
             <p class="eyebrow mb-4">Contact</p>
             <ul class="space-y-2 text-sm text-ivory/80">
-                <li>hello@maisonnoir.example</li>
+                <li>malinthashehan421@gmail.com</li>
                 <li>+94 71 541 5568</li>
             </ul>
             <div class="mt-4 flex gap-5 text-ivory/70">
